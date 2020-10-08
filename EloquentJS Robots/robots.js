@@ -1,0 +1,2 @@
+// a robot is a function that takes a VillageState object and returns the name of a nearby place.
+//  - the thing a robot returns is an object containing both the direction it wants to move in and a memory value that will be given back to it the next time it is called.

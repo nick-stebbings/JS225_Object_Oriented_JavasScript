@@ -46,7 +46,9 @@ const studentConstructor = require('./ex_4.js');
 
 let school = {
   studentBody: [],
+
   classRegisters: {},
+
   registerAllCourses() {
     for (const student of school.studentBody) {
       for (const course of student.courses) {
@@ -57,6 +59,7 @@ let school = {
     }
     return this.classRegisters;
   },
+
   addStudent(name, year) {
     if (['1st', '2nd','3rd','4th', '5th'].includes(year)) {
       let student = studentConstructor.createStudent(name, year);
@@ -66,14 +69,17 @@ let school = {
       console.log('Invalid Year');
     }
   },
+
   enrollStudent(student, subject) {
     if (Object.keys(this.classRegisters).includes(subject)) {
       this.classRegisters[subject].push(student);
     }
   },
+
   findStudent(studentName) {
     return this.studentBody.findIndex((student) => student.name === studentName);
   },
+
   getReportCard(studentName) {
     let studentId = this.findStudent(studentName);
     if (studentId !== -1) {
@@ -94,54 +100,76 @@ let school = {
         studentsEnrolled = studentsArray;
       }
     }
-    console.log(studentsEnrolled);
+    if(studentsEnrolled.length > 0) {
+      console.log('=' + course + ' Grades =');
+      let meanScore = studentsEnrolled.reduce( (sum, student) => {
+        let grade = student.findCourseGrade(course);
+        console.log(student.name, ': ', grade);
+        return sum + grade;      
+      }, 0) / studentsEnrolled.length;
+      console.log('---');
+      console.log('= Course Average: ', meanScore);
+      console.log('');
+    } else {
+      console.log(course, ': undefined');
     }
-// = =Advanced Math Grades=
-// = foo: 90
-// = qux: 90
-// = ---
-// = Course Average: 90
-
-//for physics return undefined.
+    }
   }
 
 
 // Examples of created student objects with grades; methods on the objects are not shown here for brevity.
 // The following are only showing the properties that aren't methods for the three objects
-school.studentBody = [{
-  name: 'foo',
-  year: '3rd',
-  courses: [
-    { name: 'Math', code: 101, grade: 95, },
-    { name: 'Advanced Math', code: 102, grade: 90, },
-    { name: 'Physics', code: 202, }
-  ],
-},
-{
-  name: 'bar',
-  year: '1st',
-  courses: [
-    { name: 'Math', code: 101, grade: 91, },
-  ],
-},
-{
-  name: 'qux',
-  year: '2nd',
-  courses: [
-    { name: 'Math', code: 101, grade: 93, },
-    { name: 'Advanced Math', code: 102, grade: 90, },
-   ],
-}]
+
+
+school.studentBody = [
+  {
+    name: "foo",
+    year: "3rd",
+    courses: [
+      { name: "Math", code: 101, grade: 95 },
+      { name: "Advanced Math", code: 102, grade: 90 },
+      { name: "Physics", code: 202 },
+    ],
+    findCourseGrade(course) {
+      return this.courses[
+        this.courses.findIndex((courseObject) => courseObject.name === course)
+      ].grade;
+    },
+  },
+  {
+    name: "bar",
+    year: "1st",
+    courses: [{ name: "Math", code: 101, grade: 91 }],
+    findCourseGrade(course) {
+      return this.courses[
+        this.courses.findIndex((courseObject) => courseObject.name === course)
+      ].grade;
+    },
+  },
+  {
+    name: "qux",
+    year: "2nd",
+    courses: [
+      { name: "Math", code: 101, grade: 93 },
+      { name: "Advanced Math", code: 102, grade: 90 },
+    ],
+    findCourseGrade(course) {
+      return this.courses[
+        this.courses.findIndex((courseObject) => courseObject.name === course)
+      ].grade;
+    },
+  },
+];
 
 const [foo, bar, qux] = school.studentBody
 // school.addStudent(foo, '1st')
+school.registerAllCourses();
 school.enrollStudent(foo, 'Math');
 school.enrollStudent(bar, 'Math');
 school.enrollStudent(qux, 'Math');
 
 school.enrollStudent(foo, 'Advanced Math');
 school.enrollStudent(qux, 'Advanced Math');
-school.registerAllCourses();
 // school.getReportCard(foo.name);
 // // Math: 95
 // // Advanced Math: 90
@@ -159,7 +187,7 @@ school.courseReport('Advanced Math');
 // // = =Advanced Math Grades=
 // // = foo: 90
 // // = qux: 90
-// // = ---
+// // = ---j
 // // = Course Average: 90
 
 school.courseReport('Physics');

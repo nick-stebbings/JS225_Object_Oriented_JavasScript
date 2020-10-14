@@ -52,6 +52,12 @@ exports.createStudent = function(name, year) {
     return -1;
   };
 
+  that.findCourseGrade = function(course) {
+    return this.courses[
+      this.courses.findIndex((courseObject) => courseObject.name === course)
+    ].grade;
+  };
+
   that.addNote = function (code, newNote) {
     let foundCourse = that.findCourse(code);
     if (foundCourse !== -1) {
@@ -59,6 +65,12 @@ exports.createStudent = function(name, year) {
         ? (foundCourse.note += `; ${newNote}`)
         : (foundCourse.note = newNote);
     }
+  };
+
+  that.findCourseGrade = function(course) {
+    return this.courses[
+      this.courses.findIndex((courseObject) => courseObject.name === course)
+    ].grade;
   };
 
   that.viewNotes = function () {
@@ -81,13 +93,13 @@ exports.createStudent = function(name, year) {
   return that;
 };
 
-// let foo = createStudent('Foo', '1st');
+let foo = exports.createStudent('Foo', '1st');
 // foo.info();
 // // "Foo is a 1st year student"
 // foo.listCourses();
 // // [];
-// foo.addCourse({ name: 'Math', code: 101 });
-// foo.addCourse({ name: 'Advanced Math', code: 102 });
+foo.addCourse({ name: 'Math', code: 101, grade: 100 });
+foo.addCourse({ name: 'Advanced Math', code: 102 });
 // foo.listCourses();
 // // [{ name: 'Math', code: 101 }, { name: 'Advanced Math', code: 102 }]
 // foo.addNote(101, 'Fun course');
@@ -102,3 +114,4 @@ exports.createStudent = function(name, year) {
 // foo.viewNotes();
 // // "Math: Fun course"
 // // "Advanced Math: Difficult subject"
+// console.log(foo.findCourseGrade('Math'));

@@ -34,10 +34,13 @@ A:
 
 Object.prototype.ancestors = function() {
   let currentObject = this;
-  while(currentObject !== Object) {
-    console.log(currentObject);
-    currentObject = currentObject.__proto__;
+  let objectNames = []
+  while (Object.getPrototypeOf(currentObject)) {
+    currentObject = Object.getPrototypeOf(currentObject);
+    objectNames.push(currentObject.name);
   }
+  objectNames.push("Object.prototype");
+  return objectNames;
 }
 
 let foo = {name: 'foo'};
@@ -48,7 +51,7 @@ baz.name = 'baz';
 let qux = Object.create(baz);
 qux.name = 'qux';
 
-qux.ancestors();  // returns ['baz', 'bar', 'foo', 'Object.prototype']
-baz.ancestors();  // returns ['bar', 'foo', 'Object.prototype']
-bar.ancestors();  // returns ['foo', 'Object.prototype']
-foo.ancestors();  // returns ['Object.prototype']
+console.log( qux.ancestors());  // returns ['baz', 'bar', 'foo', 'Object.prototype']
+console.log( baz.ancestors());  // returns ['bar', 'foo', 'Object.prototype']
+console.log( bar.ancestors());  // returns ['foo', 'Object.prototype']
+console.log( foo.ancestors());  // returns ['Object.prototype']
